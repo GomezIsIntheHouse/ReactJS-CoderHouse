@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import CartWidget from '../CartWidget/CartWidget';
 
-// import CartWidget from '../CartWidget/CartWidget';
-//import { BrowserRouter as Router, Route,Switch } from "react-router-dom";
 
 
 export default class Navbar extends Component{
