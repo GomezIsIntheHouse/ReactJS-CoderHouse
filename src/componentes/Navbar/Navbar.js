@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-//import CartWidget from './CartWidget/CartWidget';
+import CartWidget from '../CartWidget/CartWidget';
+
+// import CartWidget from '../CartWidget/CartWidget';
 //import { BrowserRouter as Router, Route,Switch } from "react-router-dom";
 
 
@@ -29,6 +31,10 @@ export default class Navbar extends Component{
             </li>
             <li className="nav-item">
             <a className="nav-link ">Contacto</a>
+            </li>
+            <div className="col-12 d-flex justify-content-end me-5 mt-2"></div>
+            <li className="nav-item">
+                <CartWidget  />
             </li>
            
         </ul>
