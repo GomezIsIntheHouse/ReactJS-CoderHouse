@@ -3,9 +3,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee,faCartShopping } from '@fortawesome/free-solid-svg-icons'
 //Componentes
+import{Contador} from '../Contador/Contador'
 
 
-const CartWidget=()=>{
+const CartWidget=(data)=>{
+    let{quantity}=data;
+    
     return(
         <>
     
@@ -15,7 +18,7 @@ const CartWidget=()=>{
         
       
           
-        <h5 style={{color:'white'}}>5</h5>
+        <h5 style={{color:'white'}}>{quantity}</h5>
 
         </div>
        

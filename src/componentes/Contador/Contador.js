@@ -9,14 +9,12 @@ const Contador=(props)=>{
     const[count, setCount]=useState(0);
 
     const incremento=()=>{
-        if(count<5){
-
-            setCount(count+1)
-        }else{
-            console.log('no podes sumar mas')
-        }
+        setCount(count+1)
     }
     const decremento=()=>{
+        if(count<1){
+            return
+        }
         setCount(count-1)
     }
 
@@ -25,7 +23,7 @@ const Contador=(props)=>{
         <h1 style={{color:props.color}}>{props.texto}</h1>
 
         <div style={{display:'flex', justifyContent:'center'}}>
-            <button onClick={incremento}>+</button>
+            <button onClick={ incremento}>+</button>
                 <h1 style={{color:props.color}}>{count}</h1>
             <button onClick={decremento}>-</button>
 
