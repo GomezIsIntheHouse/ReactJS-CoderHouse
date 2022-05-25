@@ -4,6 +4,8 @@ import Navbar from './componentes/Navbar/Navbar';
 import Contador from './componentes/Contador/Contador';
 import Tarjetas from './componentes/Tarjetas/Tarjetas';
 import ShoppingCart from './componentes/Carrito/ShoppingCart';
+import ItemListContainer from './componentes/ItemListContainer/ItemListContainer';
+
 
 function App() {
   return (
@@ -11,9 +13,10 @@ function App() {
     <Navbar />
     <div>
       <Contador />
+      <ItemListContainer greeting="Soy una prop pasada desde App.js a ItemListContainer"/>
     </div>
     <hr/>
-    <ShoppingCart/>
+    {/* <ShoppingCart/> */}
     
     </>
 
