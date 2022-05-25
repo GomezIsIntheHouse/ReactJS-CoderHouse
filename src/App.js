@@ -13,7 +13,7 @@ function App() {
     <Navbar />
     <div>
       <Contador />
-      <ItemListContainer greeting="Soy una prop pasada desde App.js a ItemListContainer"/>
+      <ItemListContainer greeting="Hola Coderss"/>
     </div>
     <hr/>
     {/* <ShoppingCart/> */}
