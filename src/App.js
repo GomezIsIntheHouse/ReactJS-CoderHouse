@@ -15,6 +15,7 @@ function App() {
     <div>
       <Contador />
       <ItemListContainer greeting="Hola Coderss"/>
+
     </div>
     <hr/>
     {/* <ShoppingCart/> */}

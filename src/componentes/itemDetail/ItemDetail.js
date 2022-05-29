@@ -1,14 +1,15 @@
 import React from 'react'
 
-const ItemDetail = ({products}) => {
+const ItemDetail = ({name,price,description}) => {
+    
   return (
     <div>
         <h1>Detalle del Producto</h1>
-        {/* <ul>
-            <li>{product.name}</li>
-            <li>{product.price}</li>
-            <li>{product.description}</li>
-        </ul> */}
+        <ul>
+            <li>{name}</li>
+            <li>{price}</li>
+            <li>{description}</li>
+        </ul>
     </div>
   )
 }

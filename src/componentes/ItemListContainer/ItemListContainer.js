@@ -9,12 +9,9 @@ function ItemListContainer({greeting}) {
     useEffect(()=>{
         getProducts().then(response =>{
             setProducts(response)
-
         });
     },[])
  
-    
-
   return (
     <div>
         <h1>{greeting}</h1>

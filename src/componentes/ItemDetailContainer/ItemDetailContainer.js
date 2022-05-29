@@ -12,32 +12,31 @@ aca deberemos ejecutar una funcion, de la manera:
  pero en este caso no traera un listado, sino que traera un solo elemento de la lista.
 
 */
-import {getProducts, getProduct} from '../../asyncmock'
+// import {getProducts, getProduct} from '../../asyncmock'
 import {useState, useEffect} from 'react'
 
+import {getItem} from '../../asyncmock'
 import ItemDetail from '../itemDetail/ItemDetail'
 import React from 'react'
 
-const ItemDetailContainer = ({id}) => {
-   console.log('en ItemDetailContainer',id)
-    
-    // console.log('Id en ItemDetailContainer')
+const ItemDetailContainer = () => {
 
-     const [products, setProducts]= useState([]) 
+     const [item, setItem]= useState([]) 
 
     useEffect(()=>{
-        getProduct().then(response =>{
-            
-            setProducts(response)
-            
+        getItem('8').then(response =>{
+            setItem(response)
+
         });
-    },[])
+    },[item])
+
+console.log(item)
  
   return (
     <div>
         <h1></h1>
         {/* aca tendria que pasar la informacion del producto individual por props */}
-        <ItemDetail/>
+        <ItemDetail {...item}/>
     </div>
   )
 }

@@ -8,7 +8,6 @@ const Item = ({data}) => {
     // const item = data.filter((item)=>item.id === id)
     console.log(id)
   }
-
     const verDetalle=(id_product)=>{
 
       console.log(id_product,'id en Item')
@@ -19,11 +18,6 @@ const Item = ({data}) => {
         </>
       )
     }
-
-
-
-
-
   return (
 <>   
 
@@ -40,7 +34,7 @@ const Item = ({data}) => {
         <div>
         <button className='btn'
          style={{fontSize:'12px', borderColor:'#000000'}} 
-         onClick={()=>verDetalle(id)}>Ver Descripcion</button>
+         onClick={()=>{ verDetalle(id)}}>Ver Descripcion</button>
 
         </div>
     <div>
