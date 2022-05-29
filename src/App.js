@@ -5,6 +5,7 @@ import Contador from './componentes/Contador/Contador';
 import Tarjetas from './componentes/Tarjetas/Tarjetas';
 import ShoppingCart from './componentes/Carrito/ShoppingCart';
 import ItemListContainer from './componentes/ItemListContainer/ItemListContainer';
+import ItemDetailContainer from './componentes/ItemDetailContainer/ItemDetailContainer';
 
 
 function App() {
@@ -17,6 +18,8 @@ function App() {
     </div>
     <hr/>
     {/* <ShoppingCart/> */}
+    <ItemDetailContainer/>
+
     
     </>
 

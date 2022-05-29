@@ -30,3 +30,20 @@ export const getProducts = () => {
         }, 2000)
     })
 }
+export const getProduct = (_id)=>{
+    console.log('id:',_id)
+    return new Promise((resolve) => {
+        setTimeout((_id) => {
+        console.log('id_dentro_promise:',_id)
+
+            resolve(()=>{
+                products.filter((el)=>{
+                    if(el.id === 3){
+                        console.log('se encontro el id')
+                    }
+                    // return el.id ===_id
+                })
+            })
+        }, 2000)
+    })
+}
