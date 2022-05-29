@@ -24,7 +24,7 @@ const ItemDetailContainer = () => {
      const [item, setItem]= useState([]) 
 
     useEffect(()=>{
-        getItem('8').then(response =>{
+        getItem(9).then(response =>{
             setItem(response)
 
         });

@@ -30,13 +30,12 @@ export const getProducts = () => {
         }, 2000)
     })
 }
+
 export const getItem = (id)=>{
-    // console.log('id:',id)
+ 
     return new Promise((resolve) => {
         setTimeout(() => {
-        console.log('id_dentro_promise:',id)
-
-            resolve(()=>{products.find(prod=> prod.id === id )})
+            resolve(products.find(prod=> prod.id === id ))
         }, 2000)
     })
 }
