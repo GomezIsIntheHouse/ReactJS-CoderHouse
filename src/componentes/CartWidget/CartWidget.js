@@ -11,16 +11,17 @@ const CartWidget=(data)=>{
     
     return(
         <>
-    
+       
         <div className='mt-2 p-0' style={{display:'flex'}}>
         
             <FontAwesomeIcon style={{color:'white', fontSize:'1.5em'}} icon={faCartShopping} />
-        
+
       
           
-        <h5 style={{color:'white'}}>{quantity}</h5>
+             <h5 style={{color:'white'}}>{quantity}</h5>
 
         </div>
+        
        
       
         </>

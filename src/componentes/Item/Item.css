@@ -1,0 +1,53 @@
+.cardd{
+    /* border:thin solid rgb(162, 11, 11); */
+    padding:0.5rem;
+    margin-top:5px;
+    border: 2px solid black;
+    border-radius: 15px;
+    height: 100%;
+    /*  */
+}
+img{
+
+    width:90%;
+}
+.img-container{
+    height: 160px;
+    display: flex;
+    justify-content: center;
+}
+.Option-container{
+    margin-top: 5px;
+}
+.Option{
+    background-color: white;
+    color: black;
+    font-size: 15px;
+    padding: 5px;
+    border: 2px solid black;
+    border-radius: 15px;
+    text-decoration:none;
+}
+
+.Option:hover{
+    background: black;
+    color:white;
+
+}
+.btn-agregar{
+    font-size:12px;
+    border-color:#000000;
+}
+.btn-agregar:hover{
+    font-size: 16px;
+    border-color:2px solid black;
+    color: rgb(11, 4, 4);
+    background-color: rgb(131, 232, 232);
+}
+.btn-container{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 15%;
+    flex-direction: column;
+}

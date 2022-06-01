@@ -3,7 +3,7 @@ import Item from '../Item/Item'
 import ItemDetailContainer from '../ItemDetailContainer/ItemDetailContainer'
 
 
-const ItemList = ({products}) => {
+const ItemList = ({products, handlePage}) => {
 
   //estado del carrito
   
@@ -25,13 +25,14 @@ const ItemList = ({products}) => {
 
   return (
         <>
-    <article className='box grid-responsive'>
+    <article className='box grid-responsive' style={{width:'80%', alignItems:'center',marginLeft:'40px'}}>
     
         {products.map(product=> 
         <Item
           key={product.id} 
-          data={product}
+          {...product}
           addToCart={addToCart}
+          handlePage={handlePage}
            />)}
   
            

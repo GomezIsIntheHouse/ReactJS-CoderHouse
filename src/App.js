@@ -1,26 +1,40 @@
-import logo from './logo.svg';
+import React,{useState} from 'react';
 import './App.css';
 import Navbar from './componentes/Navbar/Navbar';
 import Contador from './componentes/Contador/Contador';
-import Tarjetas from './componentes/Tarjetas/Tarjetas';
-import ShoppingCart from './componentes/Carrito/ShoppingCart';
+
 import ItemListContainer from './componentes/ItemListContainer/ItemListContainer';
 import ItemDetailContainer from './componentes/ItemDetailContainer/ItemDetailContainer';
-
+import {BrowserRouter,Routes, Route} from 'react-router-dom'
+import CartWidget from './componentes/CartWidget/CartWidget';
 
 function App() {
+  // const[page,setPage]=useState('list')
+
   return (
     <>
-    <Navbar />
-    <div>
-      <Contador />
-      <ItemListContainer greeting="Hola Coderss"/>
-
-    </div>
-    <hr/>
+    
+      {/* <Contador /> */}
+      {/* <ItemListContainer greeting="Hola Coderss"/> */}
+    
+    
     {/* <ShoppingCart/> */}
-    <ItemDetailContainer/>
+    {/* <ItemDetailContainer/> */}
+    <BrowserRouter>
+      <Navbar /> 
+      <Routes>
+        <Route path='/' element={<ItemListContainer greeting="Hola.. Soy una tienda de ecommerce"/>}/>
+        <Route path='/detail/:productId' element={<ItemDetailContainer />}  />
+        <Route path='/category/:categoryId' element={<ItemListContainer greeting="Productos filtrados por categoria" />}  />
+        <Route path='/about' element={<h1>About de JG</h1>}/>
+        <Route path='/contacto' element={<h1>Contacto de JG</h1>}/>
+        <Route path='/productos' element={<h1>Productos de JG</h1>}/>
+        <Route path='/cart' element={<CartWidget/>}/>
 
+        <Route path='*' element={<h1>PAGE NOT FOUND - AQUI PODRIA RENDERIZAR MI PROPIO UI </h1>}/>
+
+      </Routes>
+    </BrowserRouter>
     
     </>
 

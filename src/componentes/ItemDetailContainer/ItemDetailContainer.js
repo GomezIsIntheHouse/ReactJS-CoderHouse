@@ -18,25 +18,32 @@ import {useState, useEffect} from 'react'
 import {getItem} from '../../asyncmock'
 import ItemDetail from '../itemDetail/ItemDetail'
 import React from 'react'
+import { useParams } from 'react-router-dom'
+//con el hoock useParams, puedo traer el valor de la url. 
+//Con este valor, lo puedo setear en mi funcion de busqueda de detalles
+//asi podre traer el detalle particular de cada item
 
 const ItemDetailContainer = () => {
 
-     const [item, setItem]= useState([]) 
+    const [product, setProduct]= useState([]) 
+    
+    const {productId}=useParams();
+
+    console.log(productId)
 
     useEffect(()=>{
-        getItem(9).then(response =>{
-            setItem(response)
-
+        getItem(productId).then(response =>{
+            setProduct(response)
         });
-    },[item])
+    },[product])
 
-console.log(item)
+console.log(product)
  
   return (
     <div>
         <h1></h1>
-        {/* aca tendria que pasar la informacion del producto individual por props */}
-        <ItemDetail {...item}/>
+        {/* aca tendria que pasar la informacion del producto individual por props {...item} */}
+        <ItemDetail data={product} />
     </div>
   )
 }
