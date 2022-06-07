@@ -26,7 +26,7 @@ import { useParams } from 'react-router-dom'
 const ItemDetailContainer = () => {
 
     const [product, setProduct]= useState([]) 
-    
+    const [loading, setLoading]=useState(true)
     const {productId}=useParams();
 
     console.log(productId)
@@ -34,15 +34,30 @@ const ItemDetailContainer = () => {
     useEffect(()=>{
         getItem(productId).then(response =>{
             setProduct(response)
-        });
+        }).finally(()=>{setLoading(false)})
     },[product])
 
-console.log(product)
- 
+// console.log(product)
+
+if(loading){
+    return (
+        <>
+        <div  class="alert alert-info text-center mt-3 animated fadeIn fast">
+            <h4 class="alert-heading">Cargando</h4>
+            <p>
+                <i class="fas fa-sync-alt fa-spin fa-2x"></i>
+            </p>
+            <p class="mb-0">Espere por favor</p>
+        </div>
+        </>
+    )
+    
+
+}
   return (
     <div>
-        <h1></h1>
-        {/* aca tendria que pasar la informacion del producto individual por props {...item} */}
+        
+        {/* aca tendria que pasar la informacion del producto individual por props {...item} o de la forma data={product}  */}
         <ItemDetail data={product} />
     </div>
   )

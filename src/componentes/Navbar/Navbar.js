@@ -49,7 +49,7 @@ export default class Navbar extends Component{
           <Link to='/category/accesorio-celular' className="nav-link">Acessorios de Celulares</Link>
 
           </li>
-            <li className="nav-item "  style={{}}>
+            <li className="nav-item " >
                 <Link className="nav-link" to='/cart'><CartWidget/></Link>
                 
             </li>

@@ -1,0 +1,34 @@
+.cart-legend{
+    margin-top: 15px;
+    margin-left: 20%;
+}
+.cart{
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    
+}
+.item{
+    border: solid 1px black;
+    width: 300px;
+    margin-left: 3px;
+    margin-top: 5px;
+    background-color: rgba(166, 177, 151, 0.859);
+}
+.subtotal h5{
+  display: flex;
+  justify-content: flex-end;
+}
+.btn-remove{
+    margin-top: 5px;
+    
+    font-size: 12px;
+    width: 100px;
+    color: white;
+    background-color: black;
+}
+.content{
+    display: flex;
+    justify-content: start;
+}

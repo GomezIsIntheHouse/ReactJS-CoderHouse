@@ -20,6 +20,33 @@
     margin-left: 50px;
 }
 .contador{
-    align-items: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+
+   
     
 }
+.button{
+    max-width: 158px;
+    color:white;
+    font-size: 15px;
+    margin-left:15px ;
+    padding:5px;
+    background: rgb(33, 90, 129);
+    border: solid 2px;
+    border-radius: 8px;
+}
+.button:hover{
+    background-color:rgb(89, 126, 151) ;
+}
+.finalizar{
+    margin-top: 10px;
+    margin-left: 15px;
+}
+.button-finalizar{
+    text-decoration: none;
+   
+}
+

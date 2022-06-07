@@ -1,14 +1,21 @@
 
 //FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCoffee,faCartShopping } from '@fortawesome/free-solid-svg-icons'
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 //Componentes
-import{Contador} from '../Contador/Contador'
+import CartContext from '../../Context/CartContext'
+import { useContext } from 'react'
 
 
-const CartWidget=(data)=>{
-    let{quantity}=data;
-    
+const CartWidget=()=>{
+// Usamos el use context ya que este estado NO se va a actualizar constantemente.
+// Por eso mismo no lo paso por useState
+
+//Ejemplo, el dato del usuario logueado se deberia guardar en un context.
+    const {getQuantity} = useContext(CartContext)
+
+    const quantity = getQuantity()
+    console.log(quantity)
     return(
         <>
        
@@ -18,7 +25,7 @@ const CartWidget=(data)=>{
 
       
           
-             <h5 style={{color:'white'}}>{quantity}</h5>
+             <h5 style={{color:'white',marginLeft:'8px'}}>{quantity}</h5>
 
         </div>
         
