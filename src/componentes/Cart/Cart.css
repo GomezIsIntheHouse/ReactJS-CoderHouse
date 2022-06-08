@@ -10,11 +10,13 @@
     
 }
 .item{
+    padding: 5px;
     border: solid 1px black;
+    border-radius: 5px;
     width: 300px;
     margin-left: 3px;
     margin-top: 5px;
-    background-color: rgba(166, 177, 151, 0.859);
+    background: #776788e7;;
 }
 .subtotal h5{
   display: flex;
@@ -29,6 +31,18 @@
     background-color: black;
 }
 .content{
+    width: 50%;
     display: flex;
+    flex-direction: row;
     justify-content: start;
+    margin-left: 15px;
+}
+.btn-all{
+    width: 300px;
+    margin: 10px;
+    margin-left: 22px;
+    background-color: rgba(155, 56, 56, 0.788);
+}
+.legend{
+    
 }
