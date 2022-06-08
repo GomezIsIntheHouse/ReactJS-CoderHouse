@@ -21,18 +21,18 @@ const Item = ({id,name,price,img,description}) => {
           <img alt='asd' src={img}></img>
 
         </div>
-        <h5 style={{fontSize:'14px'}}>${price}.00</h5>
+        <h5 className='precio' style={{fontSize:'14px'}}>${price}.00</h5>
 
         </div>
 
         <div className='btn-container'>
 
 
-          <div>
+          {/* <div>
               <button className='btn btn-agregar'
               style={{}} 
               onClick={()=>addToCart(id)}>Agregar</button>
-          </div>
+          </div> */}
 
           <div className='Option-container'>
             <Link to={`/detail/${id}`} className='Option'>Ver Detalle</Link>

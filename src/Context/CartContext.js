@@ -28,6 +28,7 @@ export const CartContextProvider = ({ children }) => {
     }
     
    
+   
 
     const getQuantity = () => {
         let accu = 0
@@ -39,10 +40,12 @@ export const CartContextProvider = ({ children }) => {
     }
 
     const isInCart = (id) => {
+        //pregunta si existe algun producto con ese id recibido. Devuelve true or false
         return cart.some(prod => prod.id === id)
     }
 
     const getProduct = (id) => {
+        
         return cart.find(prod => prod.id === id)
     }
 

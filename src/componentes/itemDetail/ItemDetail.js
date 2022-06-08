@@ -62,7 +62,7 @@ const ItemDetail = ({data}) => {
 
     const [inputType, setInputType] = useState('input')
 
-    const ItemCount = inputType === 'input' ? InputCount : ButtonCount
+    let ItemCount = inputType === 'input' ? InputCount : ButtonCount
 
     
 
@@ -70,6 +70,7 @@ const ItemDetail = ({data}) => {
         console.log('agregue al carrito', quantity)
         setQuantity(quantity)
         addItem({id, name, price, quantity})
+        
     }
     
     
@@ -112,7 +113,7 @@ const ItemDetail = ({data}) => {
                 { quantity > 0  ? 
                 <Link className='button button-finalizar ' to='/cart'>Finalizar compra</Link> 
                 // el ? en la sig linea, es pq hay un momento en el que no tengo ningun valor.
-                : <ItemCount stock={stock} onConfirm={handleOnAdd} initial={getProduct(id)?.quantity}/>}
+                : <ItemCount stock={stock} onConfirm={handleOnAdd} initial={getProduct(id)?.quantity} />}
 
               </div>
 

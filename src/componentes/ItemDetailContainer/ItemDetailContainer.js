@@ -42,12 +42,12 @@ const ItemDetailContainer = () => {
 if(loading){
     return (
         <>
-        <div  class="alert alert-info text-center mt-3 animated fadeIn fast">
-            <h4 class="alert-heading">Cargando</h4>
+        <div  className="alert alert-info text-center mt-3 animated fadeIn fast">
+            <h4 className="alert-heading">Cargando</h4>
             <p>
-                <i class="fas fa-sync-alt fa-spin fa-2x"></i>
+                <i className="fas fa-sync-alt fa-spin fa-2x"></i>
             </p>
-            <p class="mb-0">Espere por favor</p>
+            <p className="mb-0">Espere por favor</p>
         </div>
         </>
     )

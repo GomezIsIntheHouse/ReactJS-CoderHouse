@@ -3,7 +3,7 @@ import { useContext,useState } from 'react'
 import CartContext from '../../Context/CartContext';
 import './Cart.css'
 const Cart = () => {
-    const {cart,removeItem}=useContext(CartContext);
+    const {cart, removeItem}=useContext(CartContext);
     
     
   return (
@@ -30,7 +30,7 @@ const Cart = () => {
                     <div className='item'>Cantidad:{prod.quantity}</div>
                     <div className='item'>Precion x unidad:{prod.price}</div>
                     <div className='item subtotal'>
-                        <h5>subtotal: {prod.price}*{ prod.quantity} </h5>
+                        <h5>subtotal: {prod.price * prod.quantity }</h5>
                         
                         </div>
                     <button className='btn btn-remove' onClick={() => removeItem(prod.id)}>Remove all</button>
