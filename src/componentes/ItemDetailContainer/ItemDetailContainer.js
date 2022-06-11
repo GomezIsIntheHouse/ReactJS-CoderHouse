@@ -19,6 +19,9 @@ import {getItem} from '../../asyncmock'
 import ItemDetail from '../itemDetail/ItemDetail'
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import {getDoc,doc} from 'firebase/firestore'
+import {db} from '../../services/firebase'
+
 //con el hoock useParams, puedo traer el valor de la url. 
 //Con este valor, lo puedo setear en mi funcion de busqueda de detalles
 //asi podre traer el detalle particular de cada item
@@ -32,12 +35,17 @@ const ItemDetailContainer = () => {
     console.log(productId)
 
     useEffect(()=>{
-        getItem(productId).then(response =>{
-            setProduct(response)
-        }).finally(()=>{setLoading(false)})
+
+            getDoc(doc(db,'products', productId)).then((response=>{
+                const product = {id:response.id,...response.data()}
+
+                setProduct(product)
+            })).catch(error=>{console.log(error)}).finally(()=>{setLoading(false)})
+
+        
     },[product])
 
-// console.log(product)
+
 
 if(loading){
     return (
@@ -57,7 +65,6 @@ if(loading){
   return (
     <div>
         
-        {/* aca tendria que pasar la informacion del producto individual por props {...item} o de la forma data={product}  */}
         <ItemDetail data={product} />
     </div>
   )

@@ -43,6 +43,13 @@
     margin-left: 22px;
     background-color: rgba(155, 56, 56, 0.788);
 }
-.legend{
+.btn-comprarCarrito{
+   
     
+    font-size: 12px;
+    color: white;
+    width: 300px;
+    margin: 10px;
+    margin-left: 22px;
+    background-color: rgba(155, 56, 56, 0.788);
 }

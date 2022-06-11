@@ -51,7 +51,7 @@ const ItemDetail = ({data}) => {
         <div className='detail-cointainer'>
 
               <div className='img-container'>
-                <img alt='asd' className='img' src={img}/>
+                <img style={{width:'250px', height:'250px', padding:'3px', marginLeft:'-2px'}} alt='asd' className='img' src={img}/>
               </div>
               <div className='description'>
                 <ul>

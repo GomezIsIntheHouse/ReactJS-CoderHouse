@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 //Componentes
 import CartContext from '../../Context/CartContext'
-import { useContext } from 'react'
+import { useContext,useState } from 'react'
 
 
 const CartWidget=()=>{
@@ -13,9 +13,11 @@ const CartWidget=()=>{
 
 //Ejemplo, el dato del usuario logueado se deberia guardar en un context.
     const {getQuantity} = useContext(CartContext)
-
+    
     const quantity = getQuantity()
+    
     console.log(quantity)
+    
     return(
         <>
        
@@ -24,8 +26,8 @@ const CartWidget=()=>{
             <FontAwesomeIcon style={{color:'white', fontSize:'1.5em'}} icon={faCartShopping} />
 
       
-          
-             <h5 style={{color:'white',marginLeft:'8px'}}>{quantity}</h5>
+          {quantity>0? <h5 style={{color:'white',marginLeft:'8px'}}>{quantity}</h5>:<h5></h5>}
+             
 
         </div>
         
