@@ -9,6 +9,8 @@ import {BrowserRouter,Routes, Route} from 'react-router-dom'
 import CartWidget from './componentes/CartWidget/CartWidget';
 import Cart from './componentes/Cart/Cart';
 import {CartContextProvider}from './Context/CartContext'
+import Registro from './Registro/Registro';
+import CartDetail from './componentes/CartDetail/CartDetail';
 
 
 function App() {
@@ -28,11 +30,9 @@ function App() {
         <Route path='/' element={<ItemListContainer greeting="BIENVENIDOS! "/>}/>
         <Route path='/detail/:productId' element={<ItemDetailContainer />}  />
         <Route path='/category/:categoryId' element={<ItemListContainer greeting="Productos filtrados por categoria" />}  />
-        <Route path='/about' element={<h1>About de JG</h1>}/>
-        <Route path='/contacto' element={<h1>Contacto de JG</h1>}/>
-        <Route path='/productos' element={<h1>Productos de JG</h1>}/>
         <Route path='/cart' element={<Cart/>}/>
-
+        <Route path='/checkOut' element={<Registro/>} />
+        <Route path='/cart-detail' element={<CartDetail/>}/>
         <Route path='*' element={<h1>PAGE NOT FOUND - AQUI PODRIA RENDERIZAR MI PROPIO UI </h1>}/>
 
       </Routes>

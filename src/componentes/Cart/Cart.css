@@ -18,17 +18,47 @@
     margin-top: 5px;
     background: #776788e7;;
 }
+.card-body{
+    width: 80%;
+}
 .subtotal h5{
   display: flex;
   justify-content: flex-end;
 }
+.btn-remove-item{
+    margin-top: 5px;
+    font-size: .8em;
+    width: 4em;
+    margin: 2px;
+    color: white;
+    background-color: black;
+}
+.btn-edit-item{
+    margin-top: 5px;
+    font-size: .8em;
+    width: 4em;
+    margin: 2px;
+    color: white;
+    background-color: black;
+}
+.btn-edit-item:hover{
+    background-color: rgb(237, 184, 39);
+    color: rgb(23, 13, 13);
+    border-color: 1px black;
+    
+}
 .btn-remove{
     margin-top: 5px;
-    
-    font-size: 12px;
+    font-size: 10px;
     width: 100px;
     color: white;
     background-color: black;
+}
+.btn-remove-item:hover{
+    background: rgb(178, 14, 14);
+    color: rgb(23, 13, 13);
+    border: 1px black;
+    
 }
 .content{
     width: 50%;
@@ -38,18 +68,82 @@
     margin-left: 15px;
 }
 .btn-all{
-    width: 300px;
+    font-size: .6em;
+    min-width: 12em;
     margin: 10px;
+    height: 30px;
     margin-left: 22px;
-    background-color: rgba(155, 56, 56, 0.788);
+    background-color: rgba(157, 6, 6, 0.788);
 }
 .btn-comprarCarrito{
    
     
-    font-size: 12px;
+    font-size: .5em;
     color: white;
-    width: 300px;
+    
     margin: 10px;
-    margin-left: 22px;
-    background-color: rgba(155, 56, 56, 0.788);
+    
+    background-color: rgba(150, 38, 137, 0.788);
+    padding: 2px;
+    margin-top: 5px;
+    /* width: 5em; */
+    height: 2em;
+}
+.comprar-carrito{
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: -16px;
+}
+.cart-container{
+    display: flex;
+    justify-content: center;
+    width: 80%;
+    margin-left:38px;
+}
+.head-table{
+    font-size: 10px;
+}
+.body-table{
+    font-size: 11px;
+}
+.table-container{
+    display: flex;
+    align-content: center;
+    /* justify-content: flex-start; */
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-left: 10px;
+}
+th,
+td {
+    text-align: center;
+}
+.tool-container {
+    width: 150px;
+}
+.flex-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.btn-contenedor{
+    display: flex;
+    justify-content: center;
+    /* margin-right: 5em; */
+    flex-direction: row-reverse
+}
+.btn-seguir-comprando{
+    min-width: 12em;
+    font-size: .6em;
+    margin-top: -7px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    /* width: 30%; */
+    height: 29px;
+    /* margin-left: 30px; */
+    background-color:rgb(79, 155, 86) ;
+    color: white;
 }

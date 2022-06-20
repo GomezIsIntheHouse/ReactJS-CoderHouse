@@ -19,7 +19,7 @@ const ItemDetail = ({data}) => {
   const[quantity,setQuantity]=useState(0)
   const value = useContext(CartContext)
 
-    console.log(value)
+    // console.log(value)
 
 
     const [inputType, setInputType] = useState('input')
@@ -32,7 +32,7 @@ const ItemDetail = ({data}) => {
         setQuantity(quantity)
         addItem({id, name, price, quantity})
         Swal.fire({
-          position: 'top-end',
+          position: 'top-center',
           icon: 'success',
           title: 'Producto agregado con éxito',
           showConfirmButton: false,

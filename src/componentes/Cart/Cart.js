@@ -1,79 +1,289 @@
 import React from 'react'
 import { useContext,useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate  } from 'react-router-dom';
 import CartContext from '../../Context/CartContext';
 import './Cart.css'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashCan,faPen } from '@fortawesome/free-solid-svg-icons'
+import {addDoc, collection,doc, updateDoc,getDocs,query,where,documentId,writeBatch} from 'firebase/firestore'
+
+import {db} from '../../services/firebase'
 
 const MySwal = withReactContent(Swal)
 
 const Cart = () => {
-    const {cart, removeItem,removeAll}=useContext(CartContext);
+  const [buyer, setBuyer]= useState(
+    {buyer:{
+      name: '',
+      email:'',
+      phone:''
+    }}
+  )
+    let navigate = useNavigate();
+    const [loading, setLoading]= useState(false)
+    const {cart, removeItem,removeAll,getTotal}=useContext(CartContext);
     const [remove, setRemove]=useState('mostrar')
     const [button,setButton]=useState('mostrar')
 
+    const alerta =(producto_id,producto_name)=>{
+      Swal.fire({
+        title: `Seguro desea eliminar a : ${producto_name}`,
+        showDenyButton: true,
+        // showCancelButton: true,
+        confirmButtonText: 'Si, eliminar'
+        
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            removeItem(producto_id)
+          Swal.fire('Item eliminado', '', 'info')
+
+        } else if (result.isDenied) {
+          Swal.fire('ok, no eliminaremos este item', '', 'info')
+        }
+      })
+    }
+    const edit = (producto_id)=>{
+        console.log('prod id', producto_id)
+      {<>
+        <Link to={`/detail/${producto_id}`}></Link>
+      </>}
+        
+    }
     
+    //* Para generar la orden */
+    const ids = cart.map(prod=>prod.id);
+    //ahora voy a consultar el stock de los productos
+    const batch = writeBatch(db)
+    const OutOfStock=[]
+    const collectionRef = collection(db,'products')
+
+    const createOrder = ()=>{
+      console.log('create order')
+      setLoading(true)
+
+      const objOrder = {
+        buyer,
+        items:{
+          cart
+        },
+        total: getTotal()
+      }
+
+      console.log('Orden:', objOrder)
+
+      const collectionRef = collection(db, 'orders')
+
+      addDoc(collectionRef, objOrder).then(({id, objOrder})=>{
+        console.log(id)
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: `Orden creada extitósamente`,
+          text: id,
+          showConfirmButton: false,
+          timer:2000
+          
+        })
+        
+      })
+      
+    }
+    if(cart!=0){
+
+    // pregunto si el campo esta en el array de ids
+
+    getDocs(query(collectionRef,where(documentId(),'in', ids)))
+    .then(resp=>{
+        resp.docs.forEach(doc=>{
+
+          const dataDoc=doc.data()
+
+          const prodQuantity = cart.find(prod=>prod.id=== doc.id)?.quantity
+
+          if(dataDoc.stock >= prodQuantity){
+            //aca entra el batch update. Lugar que guardo las operaciones para ejecutarlas todas juntas
+            //dentro del batch guardo lo que voy a actualizar y a quien voy a actualiazar
+            batch.update(doc.ref, {stock:dataDoc.stock - prodQuantity}) 
+
+          }else{
+            //voy guardando los productos sin stock en el array
+            OutOfStock.push({id:doc.id,...dataDoc})
+          }
+
+        }).then(()=>{
+          if(OutOfStock.length=== 0){
+            const collectionRef = collection(db,'orders')
+           return addDoc(collectionRef, this.objOrder)
+          }else{
+              return Promise.reject({type:'out_of_stock', products:OutOfStock})
+          }
+        }).then(({id})=>{
+          batch.commit()
+          console.log('el id de la orden es', id)
+        })
+      }).catch(e=>{
+        if(e.type === 'out_of_stock'){
+          console.log('no hay stock')
+        }
+      }).finally(()=>{setLoading(false)})
+
+   
+    }
+
+    // const updateDocument=()=>{
+    //   const id = cart[0].id
+    //   const docRef = doc(db,'products',id)
+    //   updateDoc(docRef, {stock:1000}).then(()=>{
+    //     console.log('se cambio el stock')
+    //   })
+    // } 
+
+    if(loading){
+      return(
+        setTimeout(() => {
+          Swal.fire({
+            title: 'Estamos generando tu orden!',
+            showClass: {
+              popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__fadeOutUp'
+            }
+          })
+        })
+      
+      )
+    }
+    const goCart=()=>{
+      // navigate('/cart-detail')
+    }
+
   return (
       <>
+      <div className=''>
+
         <div className='cart-legend'>
             <h5 className='legend' >Carrito de Compra</h5>
             </div>
         <div >
+        <div>
+      </div>
+        
+          {/* <div className='comprar-carrito'>
      
+                
+                {
+                button === 'mostrar'? <button className='btn  btn-comprarCarrito' onClick={createOrder}>Generar Orden</button>:<></>
+                }
+                
+          </div>
+         */}
 
-        {cart.map(prod=>{
-         
-              return(
+      </div>
+          {
+             remove === 'mostrar'?
                   <>
-                  <div className='content  grid-responsive '>
-                   <div className='cart'>  
-                      <div className='item name' key={prod.id}>
-                          {prod.name}
-                      </div>
-                      <div className='item'>Cantidad: {prod.quantity}</div>
-                      <div className='item'>Precio x unidad:${prod.price}.00</div>
-                      <div className='item subtotal'>
-                          <h5>subtotal: ${prod.price * prod.quantity }.00</h5>
-                          
-                          </div>
-                      <button className='btn btn-remove' onClick={() => 
-                          Swal.fire({
-                          title: `Seguro desea eliminar a : ${prod.name}`,
-                          showDenyButton: true,
-                          // showCancelButton: true,
-                          confirmButtonText: 'Si, eliminar'
-                          
-                        }).then((result) => {
-                          /* Read more about isConfirmed, isDenied below */
-                          if (result.isConfirmed) {
-                              removeItem(prod.id)
-                            Swal.fire('Item eliminado', '', 'info')
-  
-                          } else if (result.isDenied) {
-                            Swal.fire('ok, no eliminaremos este item', '', 'info')
-                          }
-                        })
-                          }>Remove item</button>
+                  <div className='cart-container'>
 
-                  
-                  </div>
+                 
+                  <table className='mt-3 table table-bordered table-hover' style={{marginLeft:'15px !important'}}>
+                    <thead className='thead-dark'>
+                      
+                      <th className='head-table'>Producto</th>
+                      <th className='head-table'>Cantidad</th>
+                      <th className='head-table'>Costo</th>
+                      <th className='head-table'>Subtotal</th>
+                      <th className='head-table'>Herramienta</th>
+                    </thead>
+                    <tbody>
+                      {cart.map(prod=>{
+                        return(
+
+                        <tr key={prod.id}>
+                       
+                          <td className='body-table'>{prod.name}</td>
+                          <td className='body-table'>{prod.quantity}</td>
+                          <td className='body-table'>${prod.price}.00</td>
+                          <td className='body-table' id='total'>${prod.price * prod.quantity}.00</td>
+                          <td className='body-table tool-container'>
+                              <div className="flex-container">
+                                <div className='d-flex'>
+                                  
+                                <button type='button'
+                                  className='btn btn-remove-item' 
+                                  onClick={()=>alerta(prod.id,prod.name)}>
+                                    <FontAwesomeIcon icon={faTrashCan} /></button>
+                                    <Link to={`/detail/${prod.id}`}>
+                                    
+                                    <button type='button'
+                                  className='btn btn-edit-item' 
+                                  onClick={()=>edit(prod.id)}>
+                                    <FontAwesomeIcon icon={faPen} /></button>
+                                    </Link>
+                                </div>
+                              
+                              </div>
+                        </td>
+                        
+                        </tr>
+                        )
+
+                      })
+
+                      }
+                      <tr >
+                        <td style={{fontSize:'.8em'}}>Total Carrito</td>
+                        <td style={{border:'none'}}></td>
+                        <td style={{border:'none'}}><b>${getTotal()}.00</b></td>
+                        <td style={{border:'none'}}></td>
+
+                        <td style={{border:'none'}}>
+          <div className='comprar-carrito'>
+     
+                
+                {
+                button === 'mostrar'? <button className='btn  btn-comprarCarrito' onClick={createOrder}>Generar Orden</button>:<></>
+                }
+                
+          </div></td>
+                      </tr>
+                      
+                    </tbody>
+                  </table>
                   </div>
                   
                   
                   </>
-              )
-           
-              
-            
-        })}
-       
-      {  
+                  :
+                  <></>
+          }
+          {
+            <>
+            <div className='btn-contenedor'>
+
+                        <Link to={'/'}>
+                          <div className='col-12 mb-3 mt-3 botonera'>
+                            <div className='row'>
+                          <div className='d-'>
+
+                                <button 
+                                  className='btn  btn-seguir-comprando'>
+                                    Seguir comprando 
+                                  </button>
+                          </div>
+
+                          </div>
+                              </div> 
+                              </Link>
+                              {  
        remove === 'mostrar'?
        
        <button  className='btn btn-remove btn-all' onClick={() => {Swal.fire({
         
-        title: `Seguro desea `,
+        title: `¿Seguro desea eliminar todos los productos? `,
         showDenyButton: true,
       
         confirmButtonText: 'Si, eliminar'
@@ -84,6 +294,7 @@ const Cart = () => {
             removeAll()
             setRemove('no-mostrar')
             setButton('no-mostrar')
+          
           Swal.fire('Carrito eliminado', '', 'info')
 
         } else if (result.isDenied) {
@@ -93,32 +304,15 @@ const Cart = () => {
       })}}>Remove All</button>
       
       :<></>
-      
-      
-      
 
       }
-      <div>
-        {
-          button==='mostrar'?<button className='btn  btn-comprarCarrito'>Comprar Carrito</button>:<></>
-        }
-
-      </div>
-           
+            </div>
+            </>
+          }  
       
     </div>
 
     <div>
-      
-        <Link to={'/'}>
-        <button className='btn btn-remove btn-all'> Seguir comprando</button>
-      </Link>
-      
-      
-        
-                
-        
-
     </div>
 
     </>

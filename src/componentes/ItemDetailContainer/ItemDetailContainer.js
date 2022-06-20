@@ -32,7 +32,7 @@ const ItemDetailContainer = () => {
     const [loading, setLoading]=useState(true)
     const {productId}=useParams();
 
-    console.log(productId)
+    // console.log(productId)
 
     useEffect(()=>{
 
