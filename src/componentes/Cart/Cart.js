@@ -76,7 +76,7 @@ const Cart = () => {
 
       const collectionRef = collection(db, 'orders')
 
-      addDoc(collectionRef, objOrder).then(({id, objOrder})=>{
+      addDoc(collectionRef, objOrder).then(({id})=>{
         console.log(id)
         Swal.fire({
           position: 'center',
@@ -92,7 +92,7 @@ const Cart = () => {
       
     }
     if(cart!=0){
-
+      
     // pregunto si el campo esta en el array de ids
 
     getDocs(query(collectionRef,where(documentId(),'in', ids)))
@@ -133,13 +133,7 @@ const Cart = () => {
    
     }
 
-    // const updateDocument=()=>{
-    //   const id = cart[0].id
-    //   const docRef = doc(db,'products',id)
-    //   updateDoc(docRef, {stock:1000}).then(()=>{
-    //     console.log('se cambio el stock')
-    //   })
-    // } 
+     
 
     if(loading){
       return(
@@ -165,31 +159,16 @@ const Cart = () => {
       <>
       <div className=''>
 
-        <div className='cart-legend'>
-            <h5 className='legend' >Carrito de Compra</h5>
+             <div className='cart-legend'>
+                <h5 className='legend' >Carrito de Compra</h5>
             </div>
-        <div >
-        <div>
-      </div>
-        
-          {/* <div className='comprar-carrito'>
-     
-                
-                {
-                button === 'mostrar'? <button className='btn  btn-comprarCarrito' onClick={createOrder}>Generar Orden</button>:<></>
-                }
-                
-          </div>
-         */}
-
-      </div>
           {
              remove === 'mostrar'?
                   <>
-                  <div className='cart-container'>
+                  <div className='cart-container col-12'>
 
                  
-                  <table className='mt-3 table table-bordered table-hover' style={{marginLeft:'15px !important'}}>
+                    <table className='mt-3 table table-bordered table-hover' >
                     <thead className='thead-dark'>
                       
                       <th className='head-table'>Producto</th>
@@ -234,21 +213,23 @@ const Cart = () => {
                       })
 
                       }
-                      <tr >
-                        <td style={{fontSize:'.8em'}}>Total Carrito</td>
-                        <td style={{border:'none'}}></td>
-                        <td style={{border:'none'}}><b>${getTotal()}.00</b></td>
-                        <td style={{border:'none'}}></td>
+                      <tr  className='total-head' style={{background:'#D2ACEC '}} >
+                        <td style={{fontSize:'.6em',borderColor:'#D2ACEC '}}>Total Carrito</td>
+                        <td style={{borderColor:'#D2ACEC '}}></td>
+                        <td className='nro-total' style={{borderColor:'#D2ACEC ',fontSize:'0.6rem'}}><b>${getTotal()}.00</b></td>
+                        <td style={{borderColor:'#D2ACEC '}}></td>
 
-                        <td style={{border:'none'}}>
-          <div className='comprar-carrito'>
-     
-                
-                {
-                button === 'mostrar'? <button className='btn  btn-comprarCarrito' onClick={createOrder}>Generar Orden</button>:<></>
-                }
-                
-          </div></td>
+                        <td style={{borderColor:'#D2ACEC '}}>
+                          <div className='comprar-carrito'>
+                    
+                                
+                                {
+                                button === 'mostrar'? <button className='btn  btn-comprarCarrito' 
+                                onClick={createOrder}>Generar Orden</button>:<></>
+                                }
+                                
+                          </div>
+                          </td>
                       </tr>
                       
                     </tbody>
@@ -312,8 +293,7 @@ const Cart = () => {
       
     </div>
 
-    <div>
-    </div>
+    
 
     </>
   )

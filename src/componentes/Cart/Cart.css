@@ -81,7 +81,7 @@
     font-size: .5em;
     color: white;
     
-    margin: 10px;
+    /* margin: 10px; */
     
     background-color: rgba(150, 38, 137, 0.788);
     padding: 2px;
@@ -98,13 +98,15 @@
     display: flex;
     justify-content: center;
     width: 80%;
+    max-width: 800px;
     margin-left:38px;
+
 }
 .head-table{
     font-size: 10px;
 }
 .body-table{
-    font-size: 11px;
+    font-size: .6rem;
 }
 .table-container{
     display: flex;
@@ -146,4 +148,25 @@ td {
     /* margin-left: 30px; */
     background-color:rgb(79, 155, 86) ;
     color: white;
+}
+
+@media only screen and (min-width: 980px){
+    .cart-container{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        max-width: 800px;
+        margin-left:100px;
+        margin-top: -5px
+    
+    }
+    thead .head-table{
+        font-size: 14px;
+    }
+    .total-head{
+        font-size: 24px;
+    }
+    .nro-total{
+        font-size: 24px;
+    }
 }
