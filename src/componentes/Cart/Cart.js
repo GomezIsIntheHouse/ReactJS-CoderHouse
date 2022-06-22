@@ -1,26 +1,33 @@
 import React from 'react'
 import { useContext,useState } from 'react'
 import { Link, useNavigate  } from 'react-router-dom';
-import CartContext from '../../Context/CartContext';
+
 import './Cart.css'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan,faPen } from '@fortawesome/free-solid-svg-icons'
-import {addDoc, collection,doc, updateDoc,getDocs,query,where,documentId,writeBatch} from 'firebase/firestore'
 
+import {addDoc, collection,doc, updateDoc,getDocs,query,where,documentId,writeBatch} from 'firebase/firestore'
 import {db} from '../../services/firebase'
+
+import CartContext from '../../Context/CartContext';
+import Registro from '../Registro/Registro';
 
 const MySwal = withReactContent(Swal)
 
 const Cart = () => {
   const [buyer, setBuyer]= useState(
-    {buyer:{
+    {
       name: '',
       email:'',
-      phone:''
-    }}
+      phone:'',
+      edad:'',
+      direccion:''
+    }
   )
+
+  
     let navigate = useNavigate();
     const [loading, setLoading]= useState(false)
     const {cart, removeItem,removeAll,getTotal}=useContext(CartContext);
@@ -52,6 +59,7 @@ const Cart = () => {
       </>}
         
     }
+    
     
     //* Para generar la orden */
     const ids = cart.map(prod=>prod.id);
@@ -220,7 +228,7 @@ const Cart = () => {
                         <td style={{borderColor:'#D2ACEC '}}></td>
 
                         <td style={{borderColor:'#D2ACEC '}}>
-                          <div className='comprar-carrito'>
+                          <div className='comprar-carrito-cart'>
                     
                                 
                                 {
@@ -243,22 +251,27 @@ const Cart = () => {
           }
           {
             <>
+            <div>
+              <Link to={'./registro'}>
+              
+                <Registro buyer={buyer} setBuyer={setBuyer}/>
+              </Link>
+            </div>
             <div className='btn-contenedor'>
 
-                        <Link to={'/'}>
-                          <div className='col-12 mb-3 mt-3 botonera'>
-                            <div className='row'>
-                          <div className='d-'>
+            <Link to={'/'}>
+              <div className='col-12 mb-3 mt-3 '>
+                  <div className=''>
+                      <div className=''>
 
-                                <button 
-                                  className='btn  btn-seguir-comprando'>
-                                    Seguir comprando 
-                                  </button>
-                          </div>
+                            <button className='btn  btn-seguir-comprando'>
+                                Seguir comprando 
+                            </button>
+                      </div>
 
-                          </div>
-                              </div> 
-                              </Link>
+                  </div>
+              </div> 
+            </Link>
                               {  
        remove === 'mostrar'?
        

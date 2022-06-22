@@ -80,7 +80,7 @@
     
     font-size: .5em;
     color: white;
-    
+    padding: 15px;
     /* margin: 10px; */
     
     background-color: rgba(150, 38, 137, 0.788);
@@ -89,7 +89,7 @@
     /* width: 5em; */
     height: 2em;
 }
-.comprar-carrito{
+.comprar-carrito-cart{
     display: flex;
     justify-content: space-around;
     margin-bottom: -16px;
