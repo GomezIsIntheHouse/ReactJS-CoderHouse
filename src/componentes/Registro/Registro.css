@@ -6,8 +6,9 @@
     cursor: pointer;
 
 }
-.comprar-carrito.hover{
-    background-color:  rgba(103, 207, 103, 0.967);
+.comprar-carrito:hover{
+    background-color:  rgba(36, 176, 215, 0.967);
+    /* color: blue; */
 }
 .comprar-container{
     display: flex;

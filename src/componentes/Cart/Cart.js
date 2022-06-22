@@ -251,15 +251,20 @@ const Cart = () => {
           }
           {
             <>
-            <div>
-              <Link to={'./registro'}>
+              <Link to={'/registro'}>
+            <div className='cargar-datos'>
+                <button className='btn btn-danger' onClick={()=>{
+
+                      <Registro buyer={buyer} setBuyer={setBuyer}/>
+                }}>
+                    CARGAR DATOS PERSONALES
+                </button>
               
-                <Registro buyer={buyer} setBuyer={setBuyer}/>
-              </Link>
             </div>
+              </Link>
             <div className='btn-contenedor'>
 
-            <Link to={'/'}>
+            <Link to={'/'}  style={{textDecoration:'none'}}>
               <div className='col-12 mb-3 mt-3 '>
                   <div className=''>
                       <div className=''>

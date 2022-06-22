@@ -2,18 +2,19 @@ import React from 'react'
 import {useState,useEffect } from 'react'
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAt,faUser,faKey, faPhone,faLocationDot } from '@fortawesome/free-solid-svg-icons'
+import { faAt,faUser,faCalendarCheck, faPhone,faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import './Registro.css'
+import { Link } from 'react-router-dom';
 
-const Registro = ({buyer,setBuyer}) => {
+const Registro = (buyer,setBuyer) => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
     const onSubmit = data => console.log(data);
 
-    // const[email,SetEmail]= useState('')
-    // const[name,SetName]= useState('')
-    // const[phone,SetPhone]= useState('')
-    // const[direccion,SetDireccion]= useState('')
-    // const[edad,SetEdad]= useState('')
+    const[email,SetEmail]= useState('')
+    const[name,SetName]= useState('')
+    const[phone,SetPhone]= useState('')
+    const[direccion,SetDireccion]= useState('')
+    const[edad,SetEdad]= useState('')
 
 
     
@@ -121,14 +122,17 @@ const Registro = ({buyer,setBuyer}) => {
                                         
                                         <div className="input-group-append">
                                                 <div className="input-group-text">
-                                                    <span><FontAwesomeIcon icon={faKey} /></span>  
+                                                    <span><FontAwesomeIcon icon={faCalendarCheck} /></span>  
                                                 </div>
                                         </div>
                                     </div>
+                                    <Link to={'/cart'} style={{textDecoration:'none'}}>
                                 <div className='comprar-container'>
-
-                                    <button className='comprar-carrito' type="submit" >Cargar Datos</button>
+                                    
+                                    
+                                    <button className='comprar-carrito' type="submit"  >Cargar Datos</button>
                                 </div>
+                                    </Link>
                                 <div className='col-12'>
                                 <label style={{fontSize:'12px'}} className="mt-4">Al comprar aceptas recibir encuestas y/o ofertas de #JG.Informática</label>
 
