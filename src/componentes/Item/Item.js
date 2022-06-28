@@ -28,11 +28,7 @@ const Item = ({id,name,price,img,description}) => {
         <div className='btn-container'>
 
 
-          {/* <div>
-              <button className='btn btn-agregar'
-              style={{}} 
-              onClick={()=>addToCart(id)}>Agregar</button>
-          </div> */}
+          
 
           <div className='Option-container'>
             <Link to={`/detail/${id}`} className='Option'>Ver Detalle</Link>

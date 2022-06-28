@@ -14,7 +14,8 @@ aca deberemos ejecutar una funcion, de la manera:
 */
 // import {getProducts, getProduct} from '../../asyncmock'
 import {useState, useEffect} from 'react'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import {getItem} from '../../asyncmock'
 import ItemDetail from '../itemDetail/ItemDetail'
 import React from 'react'
@@ -52,8 +53,8 @@ if(loading){
         <>
         <div  className="alert alert-info text-center mt-3 animated fadeIn fast">
             <h4 className="alert-heading">Cargando</h4>
-            <p>
-                <i className="fas fa-sync-alt fa-spin fa-2x"></i>
+            <p className='fa-3x'>
+                <i ><FontAwesomeIcon icon={faSpinner}  spinPulse  /></i>
             </p>
             <p className="mb-0">Espere por favor</p>
         </div>
@@ -63,8 +64,7 @@ if(loading){
 
 }
   return (
-    <div>
-        
+    <div>  
         <ItemDetail data={product} />
     </div>
   )

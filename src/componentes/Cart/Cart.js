@@ -1,5 +1,5 @@
 import React from 'react'
-import { useContext,useState } from 'react'
+import { useContext, useState } from 'react'
 import { Link, useNavigate  } from 'react-router-dom';
 
 import './Cart.css'
@@ -7,7 +7,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan,faPen } from '@fortawesome/free-solid-svg-icons'
-
+import {useAuth} from '../../Context/AuthContext'
 import {addDoc, collection,doc, updateDoc,getDocs,query,where,documentId,writeBatch} from 'firebase/firestore'
 import {db} from '../../services/firebase'
 
@@ -17,20 +17,12 @@ import Registro from '../Registro/Registro';
 const MySwal = withReactContent(Swal)
 
 const Cart = () => {
-  const [buyer, setBuyer]= useState(
-    {
-      name: '',
-      email:'',
-      phone:'',
-      edad:'',
-      direccion:''
-    }
-  )
-
+  const {user,loadingAuth,logout} =  useAuth()
+    // const AuthContext=useAuth() //importando el contexto de manera mas pro
   
     let navigate = useNavigate();
     const [loading, setLoading]= useState(false)
-    const {cart, removeItem,removeAll,getTotal}=useContext(CartContext);
+    const {cart, removeItem,removeAll,getTotal,quantity}=useContext(CartContext);
     const [remove, setRemove]=useState('mostrar')
     const [button,setButton]=useState('mostrar')
 
@@ -59,117 +51,162 @@ const Cart = () => {
       </>}
         
     }
-    
-    
-    //* Para generar la orden */
-    const ids = cart.map(prod=>prod.id);
-    //ahora voy a consultar el stock de los productos
-    const batch = writeBatch(db)
-    const OutOfStock=[]
-    const collectionRef = collection(db,'products')
 
-    const createOrder = ()=>{
-      console.log('create order')
-      setLoading(true)
-
-      const objOrder = {
-        buyer,
-        items:{
-          cart
-        },
-        total: getTotal()
-      }
-
-      console.log('Orden:', objOrder)
-
-      const collectionRef = collection(db, 'orders')
-
-      addDoc(collectionRef, objOrder).then(({id})=>{
-        console.log(id)
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: `Orden creada extitósamente`,
-          text: id,
-          showConfirmButton: false,
-          timer:2000
-          
-        })
-        
-      })
-      
-    }
-    if(cart!=0){
-      
-    // pregunto si el campo esta en el array de ids
-
-    getDocs(query(collectionRef,where(documentId(),'in', ids)))
-    .then(resp=>{
-        resp.docs.forEach(doc=>{
-
-          const dataDoc=doc.data()
-
-          const prodQuantity = cart.find(prod=>prod.id=== doc.id)?.quantity
-
-          if(dataDoc.stock >= prodQuantity){
-            //aca entra el batch update. Lugar que guardo las operaciones para ejecutarlas todas juntas
-            //dentro del batch guardo lo que voy a actualizar y a quien voy a actualiazar
-            batch.update(doc.ref, {stock:dataDoc.stock - prodQuantity}) 
-
-          }else{
-            //voy guardando los productos sin stock en el array
-            OutOfStock.push({id:doc.id,...dataDoc})
-          }
-
-        }).then(()=>{
-          if(OutOfStock.length=== 0){
-            const collectionRef = collection(db,'orders')
-           return addDoc(collectionRef, this.objOrder)
-          }else{
-              return Promise.reject({type:'out_of_stock', products:OutOfStock})
-          }
-        }).then(({id})=>{
-          batch.commit()
-          console.log('el id de la orden es', id)
-        })
-      }).catch(e=>{
-        if(e.type === 'out_of_stock'){
-          console.log('no hay stock')
+    const createOrder = () => {
+        console.log('crear orden')
+        setLoading(true)
+      const usuario = {email:localStorage.getItem('email'),nombre:localStorage.getItem('nombre'),direccion:localStorage.getItem('direccion')}
+        const objOrder = {
+            usuario,
+            items: cart,
+            total: getTotal()
         }
-      }).finally(()=>{setLoading(false)})
+        console.log('orden', objOrder)
+        const ids = cart.map(prod => prod.id)
 
-   
+        const batch = writeBatch(db)
+
+        const outOfStock = []
+
+        const collectionRef = collection(db, 'products')
+
+        getDocs(query(collectionRef, where(documentId(), 'in', ids)))
+            .then(response => {
+                response.docs.forEach(doc => {
+                    const dataDoc = doc.data()
+                    const prodQuantity = cart.find(prod => prod.id === doc.id)?.quantity
+
+                    if(dataDoc.stock >= prodQuantity) {
+                        batch.update(doc.ref, { stock: dataDoc.stock - prodQuantity})
+                    } else {
+                        outOfStock.push({ id: doc.id, ...dataDoc})
+                    }
+                })
+            }).then(() => {
+                if(outOfStock.length === 0) {
+                    const collectionRef = collection(db, 'orders')
+                    return addDoc(collectionRef, objOrder)
+                } else {
+                    return Promise.reject({ type: 'out_of_stock', products: outOfStock})
+                }
+            }).then(({ id }) => {
+                batch.commit()
+                
+
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: `Orden creada extitósamente`,
+                    text: id,
+                    showConfirmButton: false,
+                    timer:1000
+                    
+                  })
+
+            }).catch(error => {
+                console.log(error)
+                   Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Algunos items no tienen stock',
+                   
+                    showConfirmButton: false,
+                    timer:2000
+                    
+                  })
+            }).finally(() => {
+                setLoading(false)
+            })
     }
 
-     
+    // if(loadingAuth){
+    //   return <h1>Loading...</h1>
+    // }
 
-    if(loading){
-      return(
-        setTimeout(() => {
-          Swal.fire({
-            title: 'Estamos generando tu orden!',
-            showClass: {
-              popup: 'animate__animated animate__fadeInDown'
-            },
-            hideClass: {
-              popup: 'animate__animated animate__fadeOutUp'
-            }
-          })
-        })
-      
-      )
-    }
-    const goCart=()=>{
-      // navigate('/cart-detail')
-    }
+    const handleLogout = async()=>{
 
+        await logout()
+       
+    }
+  
   return (
       <>
       <div className=''>
 
              <div className='cart-legend'>
-                <h5 className='legend' >Carrito de Compra</h5>
+                <h5 className='legend' >Carrito de Compra de {user?.email}</h5> 
             </div>
+           
+              <div className='d-flex ms-3'>
+
+                          {
+                            user?
+                            <div className=''><button className='btn btn-danger' onClick={()=>{
+                              Swal.fire({
+                      
+                                title: `¿Seguro desea salir? `,
+                                showDenyButton: true,
+                                confirmButtonText: 'Aceptar'
+                                
+                              }).then((result)=>{
+                                if(result.isConfirmed){
+                                  removeAll()
+                                  Swal.fire('Muchas gracias por su visita', '', 'info')
+                                  setTimeout(() => {
+                                    handleLogout()
+                                  }, 500);
+                                }
+
+                              })
+                              
+                            }}>Logout</button></div>:
+
+                            <></>
+                          }
+                           {button ==='mostrar'?
+            
+            
+                        
+                        <div className='cargar-datos ms-3'>
+
+                            <button className='btn btn-info' onClick={()=>{ 
+                              // if(user){
+                              //   var name = localStorage.getItem('nombre')
+                              //   var direcc = localStorage.getItem('direccion')
+                              //   var email = localStorage.getItem('direccion')
+                              //   console.log(name, direcc,email)
+                              // }
+                              Swal.fire({
+                      
+                                title: `Carrito de ${user.email} `,
+                                text:`Enviaremos a ${localStorage.getItem('nombre')}, con dirección en:${localStorage.getItem('direccion')}`,
+                                showDenyButton: true,
+                                confirmButtonText: 'Crear orden de Compra'
+                                
+                              }).then((result)=>{
+                                if(result.isConfirmed){
+                                  createOrder()
+                                  setTimeout(() => {
+                                    navigate('/')
+                                    removeAll()
+                                  }, 1500);
+                                }
+                                if(result.isDenied){
+                                  
+                                  
+                                  return;
+                                }
+
+                              })
+                            }}>
+                                Comprar Carrito
+                            </button>
+                          
+                        </div>
+                          :<></>
+                          
+                          }
+              </div>
           {
              remove === 'mostrar'?
                   <>
@@ -178,12 +215,16 @@ const Cart = () => {
                  
                     <table className='mt-3 table table-bordered table-hover' >
                     <thead className='thead-dark'>
+                      <tr>
+
+
+                        <th className='head-table'>Producto</th>
+                        <th className='head-table'>Cantidad</th>
+                        <th className='head-table'>Costo</th>
+                        <th className='head-table'>Subtotal</th>
+                        <th className='head-table'>Tools</th>
+                      </tr>
                       
-                      <th className='head-table'>Producto</th>
-                      <th className='head-table'>Cantidad</th>
-                      <th className='head-table'>Costo</th>
-                      <th className='head-table'>Subtotal</th>
-                      <th className='head-table'>Herramienta</th>
                     </thead>
                     <tbody>
                       {cart.map(prod=>{
@@ -206,9 +247,9 @@ const Cart = () => {
                                     <Link to={`/detail/${prod.id}`}>
                                     
                                     <button type='button'
-                                  className='btn btn-edit-item' 
-                                  onClick={()=>edit(prod.id)}>
-                                    <FontAwesomeIcon icon={faPen} /></button>
+                                      className='btn btn-edit-item' 
+                                      onClick={()=>edit(prod.id)}>
+                                        <FontAwesomeIcon icon={faPen} /></button>
                                     </Link>
                                 </div>
                               
@@ -227,17 +268,7 @@ const Cart = () => {
                         <td className='nro-total' style={{borderColor:'#D2ACEC ',fontSize:'0.6rem'}}><b>${getTotal()}.00</b></td>
                         <td style={{borderColor:'#D2ACEC '}}></td>
 
-                        <td style={{borderColor:'#D2ACEC '}}>
-                          <div className='comprar-carrito-cart'>
-                    
-                                
-                                {
-                                button === 'mostrar'? <button className='btn  btn-comprarCarrito' 
-                                onClick={createOrder}>Generar Orden</button>:<></>
-                                }
-                                
-                          </div>
-                          </td>
+                      
                       </tr>
                       
                     </tbody>
@@ -251,17 +282,23 @@ const Cart = () => {
           }
           {
             <>
-              <Link to={'/registro'}>
+            {/* {
+              user?
+              <div>
+                
+              </div>:<div></div>
+            } */}
+            
+           
+              {/* <Link to={'/registro'}>
             <div className='cargar-datos'>
-                <button className='btn btn-danger' onClick={()=>{
 
-                      <Registro buyer={buyer} setBuyer={setBuyer}/>
-                }}>
+                <button className='btn btn-danger' onClick={()=>{ <Registro/>}}>
                     CARGAR DATOS PERSONALES
                 </button>
               
             </div>
-              </Link>
+              </Link> */}
             <div className='btn-contenedor'>
 
             <Link to={'/'}  style={{textDecoration:'none'}}>

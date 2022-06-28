@@ -64,3 +64,6 @@
   background-color: white;
   color: black;
 }
+.navbar{
+  position:'fixed'
+}

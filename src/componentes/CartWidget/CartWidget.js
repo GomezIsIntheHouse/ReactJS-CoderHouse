@@ -22,8 +22,9 @@ const CartWidget=()=>{
         <>
        
         <div className='mt-2 p-0' style={{display:'flex'}}>
-        
-            <FontAwesomeIcon style={{color:'white', fontSize:'1.5em'}} icon={faCartShopping} />
+            {quantity?<FontAwesomeIcon style={{color:'white', fontSize:'1.5em'}} icon={faCartShopping} shake   />:
+             <FontAwesomeIcon style={{color:'white', fontSize:'1.5em'}} icon={faCartShopping}    />}
+            
 
       
           {quantity>0? <h5 style={{color:'white',marginLeft:'8px'}}>{quantity}</h5>:<h5></h5>}

@@ -22,7 +22,7 @@ const ItemDetail = ({data}) => {
     // console.log(value)
 
 
-    const [inputType, setInputType] = useState('input')
+    const [seguirComprando, setSeguirComprando] = useState(false)
 
 
     
@@ -38,6 +38,7 @@ const ItemDetail = ({data}) => {
           showConfirmButton: false,
           timer: 2000
         })
+        setSeguirComprando(true)
     }
   
     
@@ -45,7 +46,7 @@ const ItemDetail = ({data}) => {
 
   return (
     <>
-        <h1 style={{marginLeft:'15px'}}>Detalle de  <small>{name}</small> </h1>
+        <h1 style={{marginLeft:'15px'}}><small>{name}</small> </h1>
       <article className='box grid-responsive' style={{width:'80%'}}>
       
         <div className='detail-cointainer'>
@@ -56,7 +57,7 @@ const ItemDetail = ({data}) => {
               <div className='description'>
                 <ul>
                     <h5 style={{fontSize:'20px'}}> Producto: {name}</h5>
-                    <li>Categoria: {category}</li>
+                    {/* <li>Categoria: {category}</li> */}
                     <li>${price}.00</li>
                     
                     <li>stock: {stock}</li>
@@ -74,20 +75,23 @@ const ItemDetail = ({data}) => {
 
         </div>
          
-          <footer className='ItemFooter'>
+          <section className='ItemFooter'>
               <div className='contador'>
               
 
               </div>
               <div className='finalizar'>
                 { quantity > 0  ? 
-                <Link className=' button-finalizar ' to='/cart'>Finalizar compra</Link> 
+                <Link className=' button-finalizar' to='/cart'>Finalizar compra</Link> 
                  //el ? en la sig linea, es pq hay un momento en el que no tengo ningun valor.
                 : <ItemCount stock={stock} onAdd={handleOnAdd} initial={getProduct(id)?.quantity} />}
               
               </div>
+              <div className='seguirComprando'>
+                  {seguirComprando !=false?<Link  to={'/'}><button className='btn btn-success btn-seguirComprando'>Seguir comprando</button></Link>:<></> }
+              </div>
 
-            </footer>
+            </section>
     </article>  
     </>
   )

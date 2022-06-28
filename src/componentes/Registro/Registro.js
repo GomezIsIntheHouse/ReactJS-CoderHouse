@@ -1,26 +1,134 @@
 import React from 'react'
-import {useState,useEffect } from 'react'
+import {useState,useEffect,useContext } from 'react'
 import { useForm } from "react-hook-form";
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAt,faUser,faCalendarCheck, faPhone,faLocationDot } from '@fortawesome/free-solid-svg-icons'
+import { faAt,faUser,faCalendarCheck, faPhone,faLocationDot,faKey } from '@fortawesome/free-solid-svg-icons'
 import './Registro.css'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate   } from 'react-router-dom';
+import Swal from 'sweetalert2'
+import {addDoc, collection,doc, updateDoc,getDocs,query,where,documentId,writeBatch} from 'firebase/firestore'
+import {db} from '../../services/firebase'
+import {useAuth} from '../../Context/AuthContext'
+import CartContext from '../../Context/CartContext';
+import { async } from '@firebase/util';
 
-const Registro = (buyer,setBuyer) => {
-    const { register, handleSubmit, formState: { errors }, watch } = useForm();
-    const onSubmit = data => console.log(data);
+const Registro = () => {
+    const { register,handleSubmit, formState: { errors }, watch } = useForm();
+    const {signup, login, error} =  useAuth()
+    const [loading, setLoading]= useState(false)
+    
+    const navigate = useNavigate  ()
+    const {cart, removeItem,removeAll, getTotal}=useContext(CartContext);
+    
 
-    const[email,SetEmail]= useState('')
-    const[name,SetName]= useState('')
-    const[phone,SetPhone]= useState('')
-    const[direccion,SetDireccion]= useState('')
-    const[edad,SetEdad]= useState('')
+    const onSubmit =  async(user)=> {
+        
+        console.log({user}) 
+        console.log(error)
+        await signup(user.email,user.password)
+       
+        
 
+           if(error){
+
+               Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'Correo ya esta en uso',
+               
+                showConfirmButton: true,
+                timer:1500
+                
+            })
+          
+           
+           }else{
+            setTimeout(() => {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Usuario registrado con éxito',
+                    text: user.email,
+                    showConfirmButton: true,
+                    timer:1500
+                    
+                })
+                navigate('/login')
+            }, 1500);
+            // localStorage.setItem('email',user.email) //
+            localStorage.setItem('nombre',user.nombre)
+            localStorage.setItem('direccion',user.direccion)
+
+      
+        }
+
+
+
+
+    };
+
+ 
+
+    // const [user, setUser] = useState({
+       
+
+    //         nombre:'',
+    //         direccion:'',
+    //         phone:'',
+    //         email:'',
+    //         password:'',
+    //         date: Date()
+        
+    //   })
+  
+
+    //   const handleSubmit = (e)=>{
+    //     e.preventDefault();
+    //     if(!user.phone | !user.nombre | !user.password | !user.edad | !user.email | !user.direccion){
+    //         setError(true)
+    //         console.log(error)
+    //     }else{
+    //         alert('formulario enviado')
+    //         setError(false)
+    //     }
+    //     if(!error){
+    //         createOrder()
+    //         setTimeout(() => {
+    //             Navigate('/')
+    //             removeAll() 
+    //         }, 2000);
+        
+    //     }
+    //   }
+    //   const handleInputChange = (event) => {
+    //     setUser({
+    //       ...user,
+    //       [event.target.name] : event.target.value,
+         
+          
+    //     })
+    //   }
 
     
-    const mostrar = ()=>{
-        console.log(buyer)
-    }
+
+    if(loading){
+        return(
+          setTimeout(() => {
+            Swal.fire({
+              title: 'Estamos generando tu orden!',
+              showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              }
+            })
+          })
+        
+        )
+      }
+   
    
 
   return (
@@ -34,18 +142,22 @@ const Registro = (buyer,setBuyer) => {
                             <h1 >JG Informática</h1>
                         </div>
                         <div className="card-body login-card-body " >
-                            <form className="form formulario" onSubmit={ev =>{ev.preventDefault();handleSubmit(onSubmit)}} >
+                            {/* {error && <p className='text-danger'>{error}</p>} */}
+                            <form className="form formulario" onSubmit={handleSubmit(onSubmit)} >
                                         <div>
-                                        {errors.name?.type ==='required' && <small className='text-danger'>El campo debe completarse </small>}
-                                        {errors.name?.type ==='maxLength' && <small className='text-danger'>El campo tiene demasiados caracteres </small>}
-                                        {errors.name?.type ==='minLength' && <small className='text-danger'>El campo tiene pocos caracteres </small>}
+                                        {errors.nombre?.type ==='required' && <small className='text-danger'>El campo debe completarse </small>}
+                                        {errors.nombre?.type ==='maxLength' && <small className='text-danger'>El campo tiene demasiados caracteres </small>}
+                                        {errors.nombre?.type ==='minLength' && <small className='text-danger'>El campo tiene pocos caracteres </small>}
                                         </div>
                                     <div className="input-group mb-3" >
                                         
-                                        <input   {...register('name',{required:true,maxLength:20,minLength:4})}
+                                        <input   {...register('nombre',{required:true,maxLength:20,minLength:4})}
                                         className="form-control " type="text" id="nombre"
                                         placeholder="Nombre de usuario" 
-                                        value={buyer.name} onChange={(e)=>{setBuyer(...buyer, buyer.name=e.target.value)}}/>
+                                        name='nombre'
+                                        //  value={user.nombre}
+                                        //  onChange={handleInputChange }
+                                         />
                                     
                                         <div className="input-group-append">
                                                 <div className="input-group-text">
@@ -53,6 +165,8 @@ const Registro = (buyer,setBuyer) => {
                                                 </div>
                                         </div>
                                     </div>
+                                 
+
                                     <div>
                                         {errors.direccion?.type==='required' && <small className='text-danger'>El campo debe completarse </small>}
                                         
@@ -61,9 +175,11 @@ const Registro = (buyer,setBuyer) => {
                                     <div className="input-group mb-3"  >
                                         
                                         <input  className="form-control " type="text" id="direccion"
-                                            placeholder="Dirección"  {...register('direccion',{required:true})} 
-                                            value={buyer.direccion}
-                                            onChange={(e)=>{setBuyer(...buyer, buyer.direccion=e.target.value)}}
+                                            placeholder="Dirección"  
+                                            {...register('direccion',{required:true})} 
+                                            name='direccion'
+                                            // value={user.direccion}
+                                         
                                             />
                                     
                                         <div className="input-group-append">
@@ -79,8 +195,9 @@ const Registro = (buyer,setBuyer) => {
                                         
                                         <input  className="form-control " type="number" id="nombre"
                                             placeholder="Phone"  {...register('phone',{required:true})}
-                                            value={buyer.phone}
-                                            onChange={(e)=>{setBuyer(...buyer, buyer.phone=e.target.value)}}
+                                            name='phone'
+                                            // value={user.phone}
+                                            // onChange={handleInputChange }
                                             />
                                     
                                         <div className="input-group-append">
@@ -96,13 +213,29 @@ const Registro = (buyer,setBuyer) => {
                                         
                                         <input  className="form-control " type="text" 
                                             placeholder="Correo" {...register('email',{required:true})}
-                                            value={buyer.email}
-                                            onChange={(e)=>{setBuyer(...buyer, buyer.email=e.target.value)}}
+                                            name='email'
+                                            // value={user.email}
+                                            // onChange={handleInputChange }
                                             />
                                         
                                         <div className="input-group-append">
                                                 <div className="input-group-text">
                                                 <span><FontAwesomeIcon icon={faAt} /></span>   
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div className="input-group mb-3"  style={{width: '100%'}}>
+                                        
+                                        <input  className="form-control " type="password" id="password"
+                                            placeholder="password" {...register('password',{required:true,min:5})}
+                                            // value={user.password}
+                                            // onChange={handleInputChange } 
+                                            name='password'
+                                            />
+                                        
+                                        <div className="input-group-append">
+                                                <div className="input-group-text">
+                                                    <span><FontAwesomeIcon icon={faKey} /></span>  
                                                 </div>
                                         </div>
                                     </div>
@@ -116,8 +249,9 @@ const Registro = (buyer,setBuyer) => {
                                         
                                         <input  className="form-control " type="number" id="edad"
                                             placeholder="Edad" {...register('edad',{required:true,min:16,max:95})}
-                                            value={buyer.edad}
-                                            onChange={(e)=>{setBuyer(buyer.edad=e.target.value)}}
+                                            name='edad'
+                                            // value={user.edad}
+                                            // onChange={handleInputChange }
                                             />
                                         
                                         <div className="input-group-append">
@@ -126,16 +260,22 @@ const Registro = (buyer,setBuyer) => {
                                                 </div>
                                         </div>
                                     </div>
-                                    <Link to={'/cart'} style={{textDecoration:'none'}}>
+                                   
                                 <div className='comprar-container'>
                                     
                                     
-                                    <button className='comprar-carrito' type="submit"  >Cargar Datos</button>
+                                    <button className='comprar-carrito' type="submit"  >Crear Usuario</button>
                                 </div>
-                                    </Link>
-                                <div className='col-12'>
+                                    
+                                {/* <div className='col-12'>
                                 <label style={{fontSize:'12px'}} className="mt-4">Al comprar aceptas recibir encuestas y/o ofertas de #JG.Informática</label>
 
+                                </div> */}
+                                <div className='col-12 mt-3 ms-3' style={{fontSize:'14px'}}>
+                                    <label> ¿Ya tienes cuenta?</label>
+                                <Link to={'/login'}>
+                                    <a style={{marginLeft:'15px'}}>¡Ingresar!</a>
+                                </Link>
                                 </div>
                             </form>
                         </div>

@@ -35,8 +35,6 @@ export const CartContextProvider = ({ children }) => {
         return total
     }
    
-   
-
     const getQuantity = () => {
         let accu = 0
         cart.forEach(prod => {
