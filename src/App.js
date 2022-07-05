@@ -16,7 +16,8 @@ import { AuthProvider } from './Context/AuthContext';
 import Register from './componentes/Register/Register';
 import Login from './componentes/Login/Login';
 import { ProtectedRoute } from './componentes/ProtectedRoute/ProtectedRoute';
-
+import Perfil from './componentes/Perfil/Perfil';
+import Footer from './componentes/Footer/Footer';
 
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
   return (
     <>
     
-      {/* value={{ cart, addItem, getQuantity}} */}
+     
       
       <CartContextProvider >
       <AuthProvider >
@@ -40,22 +41,25 @@ function App() {
                    }/>
               <Route path='/detail/:productId' element={<ItemDetailContainer />}  />
               <Route path='/category/:categoryId' element={<ItemListContainer greeting="Productos filtrados por categoria" />}  />
-             
+             <Route path='/perfil' element={
+              <ProtectedRoute>
+                <Perfil/>
+              </ProtectedRoute>
+             }/>
               <Route path='/cart' element={
                 <ProtectedRoute>
-
                   <Cart/>
                 </ProtectedRoute>
-              
               }/>
               <Route path='/registro' element={<Registro/>} />
-              <Route path='/register' element={<Register/>} />
-              <Route path='/cart-detail' element={<CartDetail/>}/>
+            
+              {/* <Route path='/cart-detail' element={<CartDetail/>}/> */}
               <Route path='/login' element={<Login/>}/>
              
               <Route path='*' element={<h1>PAGE NOT FOUND - AQUI PODRIA RENDERIZAR MI PROPIO UI </h1>}/>
 
           </Routes>
+          <Footer/>
         </AuthProvider>
       </CartContextProvider>
       

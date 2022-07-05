@@ -6,6 +6,8 @@ import { faAt,faUser,faCalendarCheck, faPhone,faLocationDot, faKey } from '@fort
 import './Login.css'
 import { Link, useNavigate } from 'react-router-dom';
 import {useAuth} from '../../Context/AuthContext'
+import Swal from 'sweetalert2'
+
 
 const Login = () => {
    
@@ -27,9 +29,27 @@ const Login = () => {
     
     //con handleSubmit trabajo con los datos del registro
     const handleSubmit = async(e) =>{
+        console.log('Error del login',error)
         e.preventDefault()
-         await login(user.email,user.password) 
-         setUserLoginControl(!userLoginControl)
+        try {
+          await login(user.email,user.password)
+        //   setTimeout(() => {
+        //     Swal.fire({
+        //         position: 'center',
+        //         icon: 'success',
+        //         title: 'Bienvenido de nuevo!',
+        //         showConfirmButton: true,
+        //         timer:500
+                
+        //     })
+           
+            
+        // }, 500);
+          setUserLoginControl(!userLoginControl)
+          
+        } catch (e) {
+          
+        }
          
     }
     
@@ -49,7 +69,7 @@ const Login = () => {
                         </div>
                         <div className="card-body login-card-body " >
 
-                            {error && <p className='text-danger' style={{fontSize:'10px'}}>{error}</p>}
+                            {error && <p className='text-danger' style={{fontSize:'16px'}}>{error}</p>}
 
                         <form className="form formulario" onSubmit={handleSubmit} >
                                    

@@ -47,17 +47,19 @@ const ItemDetail = ({data}) => {
   return (
     <>
         <h1 style={{marginLeft:'15px'}}><small>{name}</small> </h1>
-      <article className='box grid-responsive' style={{width:'80%'}}>
+      <div className='box grid-responsive' style={{width:'80%'}}>
       
         <div className='detail-cointainer'>
 
               <div className='img-container'>
                 <img style={{width:'250px', height:'250px', padding:'3px', marginLeft:'-2px'}} alt='asd' className='img' src={img}/>
               </div>
+
+              
               <div className='description'>
                 <ul>
                     <h5 style={{fontSize:'20px'}}> Producto: {name}</h5>
-                    {/* <li>Categoria: {category}</li> */}
+                    
                     <li>${price}.00</li>
                     
                     <li>stock: {stock}</li>
@@ -76,10 +78,7 @@ const ItemDetail = ({data}) => {
         </div>
          
           <section className='ItemFooter'>
-              <div className='contador'>
-              
-
-              </div>
+            
               <div className='finalizar'>
                 { quantity > 0  ? 
                 <Link className=' button-finalizar' to='/cart'>Finalizar compra</Link> 
@@ -88,11 +87,12 @@ const ItemDetail = ({data}) => {
               
               </div>
               <div className='seguirComprando'>
-                  {seguirComprando !=false?<Link  to={'/'}><button className='btn btn-success btn-seguirComprando'>Seguir comprando</button></Link>:<></> }
+                  {seguirComprando !=false?<Link  to={'/'}>
+                    <button className='btn btn-success btn-seguirComprando'>Seguir comprando</button></Link>:<></> }
               </div>
 
             </section>
-    </article>  
+    </div>  
     </>
   )
 }

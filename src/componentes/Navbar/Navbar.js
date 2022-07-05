@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import CartWidget from '../CartWidget/CartWidget';
 import {Link, NavLink} from 'react-router-dom'
 import './Navbar.css'
+import PerfilWidget from '../PerfilWidget/PerfilWidget';
 
 export default class Navbar extends Component{
     render(){
@@ -45,13 +46,18 @@ export default class Navbar extends Component{
                         </li>
                         <li className="nav-item">
                     
-                    <Link to='/category/accesorio-celular' className="nav-link">Acessorios de Celulares</Link>
+                            <Link to='/category/accesorio-celular' className="nav-link">Acessorios de Celulares</Link>
 
-                    </li>
+                         </li>
+                        <li className="nav-item " >
+                            <Link className="nav-link" to='/perfil'><PerfilWidget/></Link>
+                            
+                        </li>
                         <li className="nav-item " >
                             <Link className="nav-link" to='/cart'><CartWidget/></Link>
                             
                         </li>
+
 
                     
                     </ul>

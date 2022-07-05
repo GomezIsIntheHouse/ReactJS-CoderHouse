@@ -16,7 +16,7 @@ const CartWidget=()=>{
     
     const quantity = getQuantity()
     
-    console.log(quantity)
+    
     
     return(
         <>

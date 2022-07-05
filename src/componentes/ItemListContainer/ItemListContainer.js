@@ -15,9 +15,9 @@ function ItemListContainer({greeting, handlePAge}) {
     const [loading, setLoading]=useState(true)
     const {categoryId}=useParams();
     const navigate=useNavigate()
-    const {user,userLoginControl}=useAuth()
+    // const {user,userLoginControl}=useAuth()
     
-    console.log(user, userLoginControl)
+    // console.log(user, userLoginControl)
 
     useEffect(()=>{
       setLoading(true)
@@ -56,8 +56,7 @@ function ItemListContainer({greeting, handlePAge}) {
  
   return (
     <div>
-        <h1>{greeting} {userLoginControl? user.email:<></>}</h1>
-        {/* <button className='btn btn-info' onClick={handleLogout}>logOut</button> */}
+       
         {products.length>0 ? <ItemList products={products} handlePage={handlePAge}/> :
          <div  className="alert alert-info text-center mt-3 animated fadeIn fast">
               <h4 className="alert-heading">No hay elementos para mostrar</h4>

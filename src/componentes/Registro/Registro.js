@@ -1,5 +1,5 @@
 import React from 'react'
-import {useState,useEffect,useContext } from 'react'
+import {useState,useContext } from 'react'
 import { useForm } from "react-hook-form";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -7,62 +7,51 @@ import { faAt,faUser,faCalendarCheck, faPhone,faLocationDot,faKey } from '@forta
 import './Registro.css'
 import { Link, useNavigate   } from 'react-router-dom';
 import Swal from 'sweetalert2'
-import {addDoc, collection,doc, updateDoc,getDocs,query,where,documentId,writeBatch} from 'firebase/firestore'
-import {db} from '../../services/firebase'
+
 import {useAuth} from '../../Context/AuthContext'
 import CartContext from '../../Context/CartContext';
-import { async } from '@firebase/util';
+
 
 const Registro = () => {
     const { register,handleSubmit, formState: { errors }, watch } = useForm();
-    const {signup, login, error} =  useAuth()
+    const {signup} =  useAuth()
     const [loading, setLoading]= useState(false)
-    
+    const[error,setError]=useState()
     const navigate = useNavigate  ()
     const {cart, removeItem,removeAll, getTotal}=useContext(CartContext);
     
 
-    const onSubmit =  async(user)=> {
-        
-        console.log({user}) 
-        console.log(error)
-        await signup(user.email,user.password)
-       
-        
+    const onSubmit =  async(user, e)=> {
+       e.preventDefault()
+       console.log(user.direccion)
+       localStorage.setItem('direccion', user.direccion)
+       localStorage.setItem('nombre', user.nombre)
+       localStorage.setItem('phone', user.phone)
 
-           if(error){
 
-               Swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: 'Correo ya esta en uso',
-               
-                showConfirmButton: true,
-                timer:1500
-                
-            })
-          
-           
-           }else{
-            setTimeout(() => {
+        try {
+            await signup(user.email,user.password)
+              setTimeout(() => {
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
                     title: 'Usuario registrado con éxito',
                     text: user.email,
                     showConfirmButton: true,
-                    timer:1500
+                    timer:1000
                     
                 })
                 navigate('/login')
-            }, 1500);
-            // localStorage.setItem('email',user.email) //
-            localStorage.setItem('nombre',user.nombre)
-            localStorage.setItem('direccion',user.direccion)
-
-      
+                
+            }, 500);
+        } catch (error) {
+            if(error.code === 'auth/email-already-in-use'){
+                setError('Correo en uso')
+                console.log(error.code)
+            }
         }
 
+        
 
 
 
@@ -70,45 +59,7 @@ const Registro = () => {
 
  
 
-    // const [user, setUser] = useState({
-       
 
-    //         nombre:'',
-    //         direccion:'',
-    //         phone:'',
-    //         email:'',
-    //         password:'',
-    //         date: Date()
-        
-    //   })
-  
-
-    //   const handleSubmit = (e)=>{
-    //     e.preventDefault();
-    //     if(!user.phone | !user.nombre | !user.password | !user.edad | !user.email | !user.direccion){
-    //         setError(true)
-    //         console.log(error)
-    //     }else{
-    //         alert('formulario enviado')
-    //         setError(false)
-    //     }
-    //     if(!error){
-    //         createOrder()
-    //         setTimeout(() => {
-    //             Navigate('/')
-    //             removeAll() 
-    //         }, 2000);
-        
-    //     }
-    //   }
-    //   const handleInputChange = (event) => {
-    //     setUser({
-    //       ...user,
-    //       [event.target.name] : event.target.value,
-         
-          
-    //     })
-    //   }
 
     
 
@@ -142,7 +93,7 @@ const Registro = () => {
                             <h1 >JG Informática</h1>
                         </div>
                         <div className="card-body login-card-body " >
-                            {/* {error && <p className='text-danger'>{error}</p>} */}
+                            {error && <p className='text-danger'>{error}</p>}
                             <form className="form formulario" onSubmit={handleSubmit(onSubmit)} >
                                         <div>
                                         {errors.nombre?.type ==='required' && <small className='text-danger'>El campo debe completarse </small>}

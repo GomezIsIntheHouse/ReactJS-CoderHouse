@@ -12,18 +12,19 @@ import {addDoc, collection,doc, updateDoc,getDocs,query,where,documentId,writeBa
 import {db} from '../../services/firebase'
 
 import CartContext from '../../Context/CartContext';
-import Registro from '../Registro/Registro';
 
-const MySwal = withReactContent(Swal)
+
+
 
 const Cart = () => {
-  const {user,loadingAuth,logout} =  useAuth()
-    // const AuthContext=useAuth() //importando el contexto de manera mas pro
+  const {user} =  useAuth()
+   
   
     let navigate = useNavigate();
     const [loading, setLoading]= useState(false)
     const {cart, removeItem,removeAll,getTotal,quantity}=useContext(CartContext);
     const [remove, setRemove]=useState('mostrar')
+    const [product,setProduct]=useState([])
     const [button,setButton]=useState('mostrar')
 
     const alerta =(producto_id,producto_name)=>{
@@ -53,15 +54,23 @@ const Cart = () => {
     }
 
     const createOrder = () => {
-        console.log('crear orden')
+        setProduct([cart.map(prod=>prod.name)])
+
         setLoading(true)
-      const usuario = {email:localStorage.getItem('email'),nombre:localStorage.getItem('nombre'),direccion:localStorage.getItem('direccion')}
+
+      const usuario = {
+        email:localStorage.getItem('email'),
+        nombre:localStorage.getItem('nombre'),
+        direccion:localStorage.getItem('direccion'),
+        phone:localStorage.getItem('phone')
+      }
         const objOrder = {
             usuario,
             items: cart,
             total: getTotal()
         }
         console.log('orden', objOrder)
+
         const ids = cart.map(prod => prod.id)
 
         const batch = writeBatch(db)
@@ -119,15 +128,7 @@ const Cart = () => {
             })
     }
 
-    // if(loadingAuth){
-    //   return <h1>Loading...</h1>
-    // }
-
-    const handleLogout = async()=>{
-
-        await logout()
-       
-    }
+    
   
   return (
       <>
@@ -139,30 +140,7 @@ const Cart = () => {
            
               <div className='d-flex ms-3'>
 
-                          {
-                            user?
-                            <div className=''><button className='btn btn-danger' onClick={()=>{
-                              Swal.fire({
-                      
-                                title: `¿Seguro desea salir? `,
-                                showDenyButton: true,
-                                confirmButtonText: 'Aceptar'
-                                
-                              }).then((result)=>{
-                                if(result.isConfirmed){
-                                  removeAll()
-                                  Swal.fire('Muchas gracias por su visita', '', 'info')
-                                  setTimeout(() => {
-                                    handleLogout()
-                                  }, 500);
-                                }
-
-                              })
-                              
-                            }}>Logout</button></div>:
-
-                            <></>
-                          }
+                       
                            {button ==='mostrar'?
             
             
@@ -179,7 +157,7 @@ const Cart = () => {
                               Swal.fire({
                       
                                 title: `Carrito de ${user.email} `,
-                                text:`Enviaremos a ${localStorage.getItem('nombre')}, con dirección en:${localStorage.getItem('direccion')}`,
+                                text:`${product}`,
                                 showDenyButton: true,
                                 confirmButtonText: 'Crear orden de Compra'
                                 
@@ -189,6 +167,8 @@ const Cart = () => {
                                   setTimeout(() => {
                                     navigate('/')
                                     removeAll()
+                                    setButton('no-mostrar')
+                                    setRemove('no-mostrar')
                                   }, 1500);
                                 }
                                 if(result.isDenied){
@@ -208,8 +188,9 @@ const Cart = () => {
                           }
               </div>
           {
+           
              remove === 'mostrar'?
-                  <>
+                  
                   <div className='cart-container col-12'>
 
                  
@@ -228,6 +209,7 @@ const Cart = () => {
                     </thead>
                     <tbody>
                       {cart.map(prod=>{
+                       
                         return(
 
                         <tr key={prod.id}>
@@ -267,6 +249,7 @@ const Cart = () => {
                         <td style={{borderColor:'#D2ACEC '}}></td>
                         <td className='nro-total' style={{borderColor:'#D2ACEC ',fontSize:'0.6rem'}}><b>${getTotal()}.00</b></td>
                         <td style={{borderColor:'#D2ACEC '}}></td>
+                        <td style={{borderColor:'#D2ACEC '}}></td>
 
                       
                       </tr>
@@ -276,29 +259,13 @@ const Cart = () => {
                   </div>
                   
                   
-                  </>
+                  
                   :
                   <></>
           }
           {
             <>
-            {/* {
-              user?
-              <div>
-                
-              </div>:<div></div>
-            } */}
-            
-           
-              {/* <Link to={'/registro'}>
-            <div className='cargar-datos'>
-
-                <button className='btn btn-danger' onClick={()=>{ <Registro/>}}>
-                    CARGAR DATOS PERSONALES
-                </button>
-              
-            </div>
-              </Link> */}
+      
             <div className='btn-contenedor'>
 
             <Link to={'/'}  style={{textDecoration:'none'}}>

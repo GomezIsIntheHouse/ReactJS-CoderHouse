@@ -14,7 +14,8 @@ export const useAuth = ()=>{
 }
 
 export function AuthProvider ({children}){
-    const [error, setError] = useState()
+
+    const [error, setError] = useState(false)
 
     const [userLoginControl, setUserLoginControl]=useState(false)
     
@@ -22,38 +23,22 @@ export function AuthProvider ({children}){
 
     const [user,setUser] = useState(null)
 
-    const [dataUser,setDataUser] = useState(null)
+
 
     const [loadingAuth, setLoadingAuth] = useState(true)   
     
-    const signup = (email,password)=>{ createUserWithEmailAndPassword(auth, email, password).then(()=>{
-        console.log('error en sing up',error.code)
-        if(error.code === 'auth/email-already-in-use'){
-            setError(true)
-        }
-        if(error.code ==='' | error.code === undefined){
-            setError(false)
-        }
-    }).catch((e)=>{
-        if (e.code === '' || e.code===undefined){
-            // setError('correo en uso')
-            console.log('error en catch sing up',e.code)
-            // setError(false)
-            // console.log(error)
-        }else{
-            // setError(true)
-            // console.log(error)
-            console.log('error en catch sing up',e.code)
-        }
+    const signup = (email,password)=>  createUserWithEmailAndPassword(auth, email, password)
+
         
-    })
-}
+
 
     const login = async(email,password)=> {
        await signInWithEmailAndPassword(auth, email, password)
        .then(()=>{
 
-        navegar('/cart')} ,setError(false),localStorage.setItem('email',email),setUserLoginControl(true))
+        navegar('/')} ,setError(false),
+        localStorage.setItem('email',email),
+        setUserLoginControl(true))
 
         .catch((error)=>{
 
@@ -112,7 +97,7 @@ export function AuthProvider ({children}){
     // const a = onAuthStateChanged()
 // mediante user, envio los datos del usuario logueado.
     return (
-        <AuthContext.Provider value ={{signup, login, user, logout, loadingAuth, error, setError, userLoginControl, setUserLoginControl }}>
+        <AuthContext.Provider value ={{signup, login, user, logout, loadingAuth, error, userLoginControl, setUserLoginControl }}>
             {children}
         </AuthContext.Provider>
     )
